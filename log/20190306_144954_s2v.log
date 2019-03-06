@@ -1,7 +1,0 @@
-2019-03-06 14:49:55,350 INFO >>> Namespace(c_param=20, cv=5, data_index='r2ti_example', dir='../workspace/tmp_struc2vec_example', ext='java', fs=False, ft=True, ftype='root_to_terminal', host='127.0.0.1', identifier=True, mode='regi', model='svm', parallel=True, path=5, port=9200, s2v_index='_', under=False) >>> [in __main__]:
-2019-03-06 14:49:55,350 INFO >>> struc2vec start >>> [in __main__]:
-2019-03-06 14:49:55,350 INFO >>> register dataset > init >>> [in __main__]:
-2019-03-06 14:49:55,351 INFO >>> register dataset > mapping r2ti_example >>> [in __main__]:
-2019-03-06 14:49:55,485 INFO >>> register dataset > elasticsearch instance >>> [in __main__]:
-2019-03-06 14:49:55,491 INFO >>> register dataset > register input data >>> [in __main__]:
-2019-03-06 14:50:33,389 INFO >>> class:1, sample:100 >>> [in struc2vec.samples.register]:
