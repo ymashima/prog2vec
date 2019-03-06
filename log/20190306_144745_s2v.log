@@ -1,0 +1,17 @@
+2019-03-06 14:47:45,408 INFO >>> Namespace(c_param=20, cv=5, data_index='r2t_example', dir='', ext='java', fs=False, ft=False, ftype='root_to_terminal', host='127.0.0.1', identifier=False, mode='save', model='svm', parallel=False, path=5, port=9200, s2v_index='r2t_example_s2v', under=False) >>> [in __main__]:
+2019-03-06 14:47:45,408 INFO >>> struc2vec start >>> [in __main__]:
+2019-03-06 14:47:45,408 INFO >>> save result start >>> [in __main__]:
+2019-03-06 14:47:45,610 INFO >>> evaluate_score_fs1 >>> [in __main__]:
+2019-03-06 14:47:45,615 INFO >>> evaluate_score_fs2 >>> [in __main__]:
+2019-03-06 14:47:45,619 INFO >>> evaluate_score_fs3 >>> [in __main__]:
+2019-03-06 14:47:45,624 INFO >>> evaluate_score_fs4 >>> [in __main__]:
+2019-03-06 14:47:45,630 INFO >>> evaluate_score_fs5 >>> [in __main__]:
+2019-03-06 14:47:45,636 INFO >>> evaluate_score_fs99999 >>> [in __main__]:
+2019-03-06 14:47:45,645 INFO >>> evaluate_score_max >>> [in __main__]:
+2019-03-06 14:47:45,679 INFO >>> dis_rep_class >>> [in __main__]:
+2019-03-06 14:47:45,758 INFO >>> plot program pattern >>> [in __main__]:
+2019-03-06 14:47:47,026 INFO >>> search_sorce_code >>> [in __main__]:
+2019-03-06 14:47:51,266 INFO >>> save result end >>> [in __main__]:
+>>> [in struc2vec.samples.save]:
+2019-03-06 14:47:50,613 WARNING >>> search_sorce_code second error: >>> [in struc2vec.samples.save]:
+2019-03-06 14:47:51,265 WARNING >>> search_sorce_code second error: >>> [in struc2vec.samples.save]:
