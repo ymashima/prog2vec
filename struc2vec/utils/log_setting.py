@@ -6,6 +6,8 @@
 from datetime import datetime
 from logging import basicConfig, getLogger, config, DEBUG, INFO, StreamHandler, FileHandler, Formatter
 
+# global log file name
+log_filename = "log/{}_s2v.log".format(datetime.now().strftime("%Y%m%d_%H%M%S"))
 
 def set_log(LOGGER, root=False):
     """logの設定
@@ -26,7 +28,7 @@ def set_log(LOGGER, root=False):
     if root:
         write_mode = "w"
     handle2 = FileHandler(
-        filename="log/{}_s2v.log".format(datetime.now().strftime("%Y%m%d_%H%M%S")),
+        filename=log_filename,
         mode=write_mode,
         encoding="utf-8"
     )

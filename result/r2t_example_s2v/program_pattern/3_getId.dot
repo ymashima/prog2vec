@@ -1,0 +1,40 @@
+Digraph {
+//eps output: dot -Teps hogehoge.dot -o hogehoge.eps
+//png output: dot -Tpng hogehoge.dot -o hogehoge.png
+
+graph [
+// graph setting
+// rankdir = LR, // landscape on
+dpi = 150,
+charset = "UTF-8",
+fontcolor = white,
+layout = dot
+];
+
+node [
+shape = box,
+//fontsize = 18
+];
+
+// node define
+8 [label="IfStatement"]
+21 [label="Block"]
+30 [label="MethodDeclaration"]
+32 [label="TypeDeclaration"]
+38 [label="NumberLiteral"]
+42 [label="ReturnStatement"]
+57 [label="CompilationUnit"]
+
+
+
+// edge define
+42 -> 38
+30 -> 21
+21 -> 8
+32 -> 30
+57 -> 32
+8 -> 21
+21 -> 42
+
+
+}

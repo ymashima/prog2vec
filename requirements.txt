@@ -1,2 +1,4 @@
-nose
-sphinx
+bz2file==0.98
+elasticsearch==6.3.1
+graphviz==0.8.2
+joblib==0.12.2

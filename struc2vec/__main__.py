@@ -26,7 +26,6 @@ from struc2vec.samples.prepare_register import CommonSampleLoop
 from struc2vec.samples.prepare_svm import CommonId
 from struc2vec.samples.prepare_common import ClassScoreDoc
 from struc2vec.samples.convert_svm import CalcSVM
-from struc2vec.samples.convert_nn import CalcNN
 from struc2vec.samples.register import register_sample, register_feature, Feature
 from struc2vec.samples.save import SaveResult_SVM
 
@@ -56,16 +55,16 @@ def main():
 
     # データの入力に関するオプション
     parser.add_argument("-dir", "--input_directory", default="", type=str,
-                        help="ソースコードのフォルダーパス, デフォルトはなし",
+                        help="ソースコードのフォルダーパス, デフォルトはFalse",
                         metavar="PATH", dest="dir")
     parser.add_argument("-ext", "--extension", default="java", type=str, choices=["java", "xml"],
                         help="ディレクトリにあるファイルの種類, デフォルトはjava", dest="ext")
     parser.add_argument("-ft", "--clang_format", default=False, action="store_true",
-                        help="clang_formatによるjavaソースコードの正規化, デフォルトはなし", dest="ft")
+                        help="clang_formatによるjavaソースコードの正規化, デフォルトはFalse", dest="ft")
 
     # 数値表現の作成に関するオプション
     parser.add_argument("-fs", "--feature_selection", default=False, type=str,
-                        help="選択する素性の数, e.g. -fs 1,10,100, デフォルトはなし",
+                        help="選択する素性の数, e.g. -fs 1,10,100, デフォルトはFalse",
                         metavar="LIST", dest="fs")
     parser.add_argument("-cv", "--cross_validation", default=5, type=int,
                         help="交差検定の分割数, e.g. -cv 5, デフォルトは5",
@@ -78,11 +77,11 @@ def main():
                         help="SVMのCパラメータ, e.g. -c 20, デフォルトは20", metavar="NUM")
 
     # ファイルの書き込み
-    parser.add_argument("-ns", "--not_save", default=False, action="store_true",
-                        help="推論結果をファイルへ書き込まない, デフォルトはなし")
+    # parser.add_argument("-ns", "--not_save", default=False, action="store_true",
+    #                     help="推論結果をファイルへ書き込まない, デフォルトはなし")
     # 調査系統
-    parser.add_argument("-sl", "--statistics_learning_data", default=False, action="store_true",
-                        help="learning_dataの統計情報, デフォルトはなし")
+    # parser.add_argument("-sl", "--statistics_learning_data", default=False, action="store_true",
+    #                     help="learning_dataの統計情報, デフォルトはなし")
 
     # 共通設定
     parser.add_argument("-p", "--parallel", default=False, action="store_true",
@@ -113,19 +112,6 @@ def main():
         s2v.save_result()
     elif args.mode == "plot":
         pass
-    # if args.statistics_learning_data:
-    #     frequency(
-    #         index=args.data_index,
-    #         host=args.host,
-    #         port=args.port,
-    #         path="freq.csv",
-    #     )
-    # else:
-    #     if args.dir:
-    #         s2v.register_dataset()
-    #     # s2v.convert_vector()
-    #     # if not args.not_save:
-    #     #     s2v.save_result()
 
 class Struc2Vec(object):
     """struc2vecのメインクラス
@@ -136,21 +122,10 @@ class Struc2Vec(object):
         if self.args.fs:
             self.args.fs = list(map(int, self.args.fs.split(",")))
         LOGGER.info("struc2vec start")
-        # terminal_to_rootは，巨大データになりやすいため，小規模コーパスのみ
-        # self.ftype_list = ["root_to_terminal","path_length","terminal_to_root"]
-        # self.ftype_list = ["root_to_terminal","path_length"]
         self.ftype_list = [self.args.ftype]
 
     def register_dataset(self):
-        """register_dataset
-        ・入力されるデータセットを，elasticsearchに登録する
-        ・svm_perfで実行できる形に前処理する．
-
-        戦略:
-            parallel処理じゃないと，そもそもだめ．遅すぎる
-            1. (parallel)1000単位のファイル(java, あるいはxml)を対象
-            2. (parallel)java -> xml -> pre-learning_data (tmp_workspaceというインデックスにxmlをぶっこむ)
-            3. (単体)pre-learning_dataをsearchし，set.union+辞書化でfeature_dict, symbol_dictを作成&登録
+        """入力されるデータセットを，elasticsearchに登録する
         """
 
         # init
@@ -163,7 +138,7 @@ class Struc2Vec(object):
         # data mapping
         LOGGER.info("register dataset > mapping %s", self.args.data_index)
         ins_mapping = MappingELS(index=self.args.data_index, host=self.args.host, port=self.args.port)
-        ins_mapping.data_mapping2()
+        ins_mapping.data_mapping()
         ins_mapping.register()
 
         # parallel
@@ -255,29 +230,16 @@ class Struc2Vec(object):
         pre_class_score = ClassScoreDoc(index=self.args.s2v_index, host=self.args.host, port=self.args.port,)
         pre_class_score.register_class_score(class_id_list=ins_common_id.get_class_id_list(),ftype_list=self.ftype_list,)
 
-        # infer model
-        if self.args.model == "svm":
-            for ftype in self.ftype_list:
-                ins_calc_svm = CalcSVM(
-                    args=self.args,
-                    ftype=ftype,
-                    num_core=num_core,
-                    work_root=work_root,
-                    ins_common_id=ins_common_id,
-                )
-                ins_calc_svm.run()
-        elif self.args.model == "nn":
-            for ftype in self.ftype_list:
-                ins_calc_nn = CalcNN(
-                        args=self.args,
-                        ftype=ftype,
-                        num_core=num_core,
-                        work_root=work_root,
-                        ins_common_id=ins_common_id,
-                    )
-                ins_calc_nn.run()
-        elif self.args.model == "rnn":
-            pass
+        # infer model svm
+        for ftype in self.ftype_list:
+            ins_calc_svm = CalcSVM(
+                args=self.args,
+                ftype=ftype,
+                num_core=num_core,
+                work_root=work_root,
+                ins_common_id=ins_common_id,
+            )
+            ins_calc_svm.run()
 
         # end
         work_root.delete()

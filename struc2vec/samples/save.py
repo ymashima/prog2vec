@@ -62,7 +62,8 @@ class SaveResult_SVM(object):
         # self.fs_list = [1,2,3,4,5]
 
         # method
-        self.__make_save_folder("result_"+s2v_index)
+        save_root = Workspace("result")
+        self.__make_save_folder(os.path.join(save_root.get_path(), s2v_index))
         self.__make_class_id_dict()
         self.__make_symbol_id_dict()
         self.__make_feature_id_dict()
