@@ -90,7 +90,7 @@ ENV/
 .ropeproject
 
 # vscode
-/.vscode/
+.vscode/*
 
 # custom
-/tmp_workspace/
+tmp_workspace/*
